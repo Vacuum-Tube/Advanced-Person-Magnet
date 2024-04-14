@@ -1,0 +1,20 @@
+function data()
+return {
+	type = "ASSET_DEFAULT",
+	description = {
+		name = _("Advanced Person Magnet"),
+		description = _("apm_con_desc"),
+	},
+	categories = { "misc" },
+	skipCollision = false,
+	autoRemovable = false,
+	params = (require "params/Advanced_Person_Magnet").paramsDef,
+	-- updateFn = function(params)
+		-- script outsourced
+	-- end
+	-- updateScript = {  -- not working, see mod.lua
+		-- fileName = "construction/Advanced_Person_Magnet.updateFn",
+		-- params = {}
+	-- },
+}
+end

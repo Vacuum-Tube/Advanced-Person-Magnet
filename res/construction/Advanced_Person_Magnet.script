@@ -1,0 +1,87 @@
+local transf = require "transf"
+local vec3 = require "vec3"
+
+local APMparams = require "params/Advanced_Person_Magnet"
+
+function data()  -- not allowed in res/scripts
+return {
+	updateFn = function(constrParams,scriptParams)  -- definition:  base_config  game.config.ConstructWithModules
+		--debugPrint(constrParams)
+		--debugPrint(scriptParams)
+		
+		local result = { }
+		result.models = { }
+		result.edgeLists = { }
+		
+		local rotZ = APMparams.Rotation.getValue(constrParams)
+		local mdlX = APMparams.OffsetX.getValue(constrParams)
+		local mdlY = APMparams.OffsetY.getValue(constrParams)
+		local streetIndex = APMparams.Street.getIndex(constrParams)
+		local model = APMparams.Model.getValue(constrParams)
+		
+		if streetIndex==0 then
+			table.insert(result.models, {
+				id = "industry/lane.mdl",
+				transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 },
+			} )
+		else
+			local streettype = scriptParams.StreetTypes[streetIndex]
+			local streetlen = APMparams.StreetLen.getValue(constrParams)
+			local streetboth = APMparams.StreetBoth.getBool(constrParams)
+			local streetY = 0
+			table.insert(result.edgeLists, {
+				type = "STREET",
+				params = {
+					type = streettype
+				},
+				edges = streetboth and {
+					{ { streetlen, streetY, 0 }, { -1, 0, 0 } },  -- other direction, so entry for headquarters is at the right side
+					{ { 0, streetY, 0 }, { -1, 0, 0 } },
+					{ { 0, streetY, 0 }, { -1, 0, 0 } },
+					{ { -streetlen, streetY, 0 }, { -1, 0, 0 } },
+				} or {
+					{ { 0, streetY, 0 }, { 1, 0, 0 } },
+					{ { streetlen, streetY, 0 }, { 1, 0, 0 } },
+				},
+				snapNodes = streetboth and { 0, 3 } or { 0 },
+			} )
+			if streetboth then
+				mdlY = mdlY + 10  -- at the side of the street
+				if model:starts("headquarter/headquarter") then
+					mdlY = mdlY + 20
+				end
+			else
+				mdlX = mdlX + streetlen + 2  -- behind non-snapable street
+			end
+		end
+		
+		table.insert(result.models, {
+			id = model,
+			transf = transf.rotZYXTransl(transf.degToRad(rotZ, 0, 0), vec3.new(mdlX, mdlY, 0 ) )
+		} )
+		
+		result.personCapacity = {
+			type = APMparams.Landuse.getValue(constrParams),
+			capacity = APMparams.PCapacity.getValue(constrParams),
+		}
+		
+		result.terrainAlignmentLists = { {
+			type = "EQUAL",
+			faces = { },
+		} }
+		
+		--debugPrint(result.edgeLists)
+		--debugPrint(result)
+		return result
+	end,
+	-- preProcessFn = function()
+		-- print("preProcessFn")
+	-- end,
+	-- upgradeFn = function()
+		-- print("upgradeFn")
+	-- end,
+	-- createTemplateFn = function()
+		-- print("createTemplateFn")
+	-- end,
+}
+end

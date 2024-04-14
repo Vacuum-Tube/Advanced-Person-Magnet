@@ -1,0 +1,38 @@
+function data()
+return {
+	boundingInfo = {
+		bbMax = { 3, 3, 3, },
+		bbMin = { -3, -3, -3, },
+	},
+	-- collider = {
+		-- params = {
+			-- halfExtents = { 1.5, 1.5, 1.5, },
+		-- },
+		-- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+		-- type = "BOX",
+	-- },
+	lods = {
+		{
+			node = {
+				children = {
+					{
+						materials = { "street/transparent.mtl", },
+						mesh = "cube_1x1_lod0.msh",
+						name = "cube_1x1",
+						transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+					},
+				},
+				name = "RootNode",
+				transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+			},
+			static = false,
+			visibleFrom = 0,
+			visibleTo = 100,
+		},
+	},
+	metadata = {
+		particleSystem = { emitters = { { } } }
+	},
+	version = 1,
+}
+end
