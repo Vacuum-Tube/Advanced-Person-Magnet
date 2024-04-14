@@ -5,7 +5,7 @@ function data()
 		info = {
 			name = _("Advanced Person Magnet"),
 			description = _("mod_desc"),
-			minorVersion = 0,
+			minorVersion = 1,
 			severityAdd = "NONE",
 			severityRemove = "WARNING",
 			tags = {"Misc", "Person", "Magnet", "Visitor", "Person Capacity" },

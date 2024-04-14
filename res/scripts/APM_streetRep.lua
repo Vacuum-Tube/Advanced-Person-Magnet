@@ -1,8 +1,9 @@
 local s = {}
 
 
-local function isVisible(street)
-	return street.upgrade==false
+local function isVisible(sid)
+	-- return street.upgrade==false
+	return api.res.streetTypeRep.isVisible(sid)
 end
 
 local function hasNumLanes(street,numlanes)
@@ -29,7 +30,7 @@ s.getStreetTypes = function(visibleOnly,excludeOneWay,onlyNumLanes,sortcountry)
 		local street = api.res.streetTypeRep.get(sid)
 		--debugPrint(street)
 		--print(#street.laneConfigs)
-		if (visibleOnly and isVisible(street)) or (not visibleOnly and true) then
+		if (visibleOnly and isVisible(sid)) or (not visibleOnly and true) then
 			if (excludeOneWay and not isOneWayStreet(street)) or (not excludeOneWay and true) then
 				if (onlyNumLanes and hasNumLanes(street,onlyNumLanes)) or (not onlyNumLanes and true) then
 					local pos = #stypes + 1 - countrycounter

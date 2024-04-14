@@ -1,5 +1,6 @@
 local transf = require "transf"
 local vec3 = require "vec3"
+local constructionutil = require "constructionutil"
 
 local APMparams = require "params/Advanced_Person_Magnet"
 
@@ -57,7 +58,7 @@ return {
 		
 		table.insert(result.models, {
 			id = model,
-			transf = transf.rotZYXTransl(transf.degToRad(rotZ, 0, 0), vec3.new(mdlX, mdlY, 0 ) )
+			transf = constructionutil.rotateTransf(constrParams, transf.rotZYXTransl(transf.degToRad(rotZ, 0, 0), vec3.new(mdlX, mdlY, 0 ) ) )
 		} )
 		
 		result.personCapacity = {
@@ -65,10 +66,12 @@ return {
 			capacity = APMparams.PCapacity.getValue(constrParams),
 		}
 		
-		result.terrainAlignmentLists = { {
-			type = "EQUAL",
-			faces = { },
-		} }
+		if not APMparams.TerrainAlign.getBool(constrParams) then
+			result.terrainAlignmentLists = { {
+				type = "EQUAL",
+				faces = { },
+			} }
+		end
 		
 		--debugPrint(result.edgeLists)
 		--debugPrint(result)
